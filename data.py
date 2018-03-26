@@ -71,9 +71,9 @@ class ProposalDataset(object):
         nb_videos = len(prop_captured)
         proportion = np.mean(prop_captured[prop_captured != -1])
         nb_no_proposals = (prop_captured == -1).sum()
-        print "Number of videos in the dataset: {}".format(nb_videos)
-        print "Proportion of videos with no proposals: {}".format(1. * nb_no_proposals / nb_videos)
-        print "Proportion of action proposals captured during labels creation: {}".format(proportion)
+        print("Number of videos in the dataset: {}".format(nb_videos))
+        print("Proportion of videos with no proposals: {}".format(1. * nb_no_proposals / nb_videos))
+        print("Proportion of action proposals captured during labels creation: {}".format(proportion))
 
 
 class ActivityNet(ProposalDataset):
@@ -99,12 +99,12 @@ class ActivityNet(ProposalDataset):
         """
         Overwriting parent class to generate action proposal labels
         """
-        print "| Generating labels for action proposals"
+        print("| Generating labels for action proposals")
         label_dataset = h5py.File(args.labels, 'w')
-        bar = progressbar.ProgressBar(maxval=len(self.data['database'].keys())).start()
+        bar = progressbar.ProgressBar(maxval=len(list(self.data['database'].keys()))).start()
         prop_captured = []
         prop_pos_examples = []
-        video_ids = self.data['database'].keys()
+        video_ids = list(self.data['database'].keys())
         split_ids = {'training': [], 'validation': [], 'testing': [],
                      'w1': []}  # maybe find a better name since w1 is not a split
         for progress, video_id in enumerate(video_ids):
@@ -132,7 +132,7 @@ class ActivityNet(ProposalDataset):
             labels = np.zeros((nfeats, args.K))
             gt_captured = []
             for t in range(nfeats):
-                for k in xrange(args.K):
+                for k in range(args.K):
                     iou, gt_index = self.iou([t - k, t + 1], featstamps, return_index=True)
                     if iou >= args.iou_threshold:
                         labels[t, k] = 1
@@ -212,7 +212,7 @@ class TrainSplit(DataSplit):
         nfeats = features.shape[0]
         nWindows = max(1, nfeats - self.W + 1)
         # Let's sample the maximum number of windows we can pass back.
-        sample = range(nWindows)
+        sample = list(range(nWindows))
         if self.max_W < nWindows:
             sample = np.random.choice(nWindows, self.max_W)
             nWindows = self.max_W
