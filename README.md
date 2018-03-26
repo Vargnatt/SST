@@ -1,5 +1,5 @@
 # SST
-SST: Single-Stream Temporal Action Proposal
+SST: Single-Stream Temporal Action Proposal (forked and modified on the basis of Ranjay Krishna's implementation)
 
 # Dependencies
 1. pytorch
